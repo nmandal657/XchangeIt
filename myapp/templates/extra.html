@@ -1,0 +1,23 @@
+<nav class="navbar bg-white border-bottom sticky-top">
+  <div class="navbar-header">
+    <span class="fs-3 fw-bolder d-flex align-items-center mb-0" style="letter-spacing: -0.5px; user-select: none;">
+      <span style="color: #20c997;">Xchange</span><span class="text-dark">It</span>
+    </span>
+  </div>
+  <ul class="nav justify-content-end">
+    <li class="nav-item">
+      <a class="nav-link fw-semibold text-dark" href="{% url 'home' %}">Browse</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link fw-semibold text-dark" href="#">MyTrades</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link fw-semibold text-dark" href="{% url 'profile' %}">Profile</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link fw-semibold text-dark" href="{% url 'logout' %}">Logout</a>
+    </li>
+    <li class="nav-item"><a class="btn fw-semibold text-dark " href="{% url 'add_item' %}"  style="background-color: #20c997 !important;">List Your Item</a>
+    </li>
+  </ul>
+</nav>

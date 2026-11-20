@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div>
+    <div class="bg-light border-bottom py-3">
+  <div class="container text-center">
+    <span class="rounded-pill px-3 py-2 mb-2 text-white fw-semibold" style="background-color:#20c997;">
+      The Modern Barter Marketplace
+    </span>
+    <h2 class="display-9 fw-bold text-dark mb-2">
+      Your Stuff. Their Stuff.<br>
+      <span style="color:#20c997;">No Cash Needed.</span>
+    </h2>
+    <p class="text-muted mb-2">
+      Trade books, gadgets, and everyday gear directly with people in your community.
+    </p>
+    <div class="d-flex justify-content-center gap-2">
+      <a href="#trending-items" class="btn px-4 py-2 text-white fw-semibold" style="background-color:#20c997;">
+        Explore Items
+      </a>
+      <a href="" class="btn btn-outline-secondary px-4 py-2 fw-semibold">
+        + List Your Item
+      </a>
+    </div>
+  </div>
+</div>
+    <div>
+        <form method="GET" action="">
+            <p class="d-inline-flex align-items-center gap-2 h3">Trending Items for Swap
+                <select class="form-select w-auto" aria-label="items_category" name="items_category">
+                    <option value="All Items" {% if items_category == 'All Items' or not items_category %}selected{% endif %}>All Items</option>
+                    <option value="Electronics Items" {% if items_category == 'Electronics Items' %}selected{% endif %}>Electronics Items</option>
+                    <option value="Home & Kitchen Items" {% if items_category == 'Home & Kitchen Items' %}selected{% endif%}>Home & Kitchen Items</option>
+                    <option value="Fashion & Clothing Items" {% if items_category == 'Fashion & Clothing Items'%}selected{% endif %}>Fashion & Clothing Items</option>
+                    <option value="Books & Media Items" {% if items_category == 'Books & Media Items' %}selected{% endif%}>Books & Media Items</option>
+                    <option value="Vehicles & Parts" {% if items_category == 'Vehicles & Parts' %}selected{% endif %}>Vehicles & Parts</option>
+                    <option value="Sports & Outdoors Items" {% if items_category == 'Sports & Outdoors Items' %}selected{% endif %}>Sports & Outdoors Items</option>
+                    <option value="Tech & Design Service" {% if items_category == 'Tech & Design Service' %}selected{%endif %}>Tech Design and Service</option>
+                    <option value="Lesson & Tutoring" {% if items_category == 'Lesson & Tutoring' %}selected{% endif %}>Lesson Tutoring</option>
+                    <option value="Home & Pet Service" {% if items_category == 'Home & Pet Service' %}selected{% endif %}>Home & Pet Service</option>
+                    <option value="Skills & Services" {% if items_category == 'Skills & Services' %}selected{% endif %}>Skill & Service</option>
+                </select>
+                <button type="submit" class="btn btn-dark btn-sm">Go</button>
+            </p>
+        </form>
+    </div>
+
+
+<div class="m-3">
+
+    <div>
+        {% if items_category == 'All Items' or not items_category %}
+        {% for item in all_items %}
+        <div class="card" style="width: 18rem; height: auto;">
+            <img src="{{item.image.url}}" class="card-img-top p-3" style="height: 250px;" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{item.name}}</h5>
+                <p class="card-text">{{item.desc}}</p>
+                <a href="{% url 'view_profile' item.user.id %}" class="link-body-emphasis link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
+                    <p class="card-text">Owner:{{item.user}}</p>
+                </a>
+                
+                <a href="" class="btn btn-primary">Propose Swap</a> 
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div>
+        {% if items_category == 'Electronics Items' %}
+        {% for item in electronics_items %}
+        <div class="card" style="width: 18rem;">
+            <img src="{{item.image.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{item.name}}</h5>
+                <p class="card-text">{{item.desc}}</p>
+                <p class="card-text">Owner:{{item.user}}</p>
+                <a href="" class="btn btn-primary">Propose Swap</a> 
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div>
+        {% if items_category == 'Home & Kitchen Items' %}
+        {% for item in home_kitchen_items %}
+        <div class="card" style="width: 18rem;">
+            <img src="{{item.image.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{item.name}}</h5>
+                <p class="card-text">{{item.desc}}</p>
+                <p class="card-text">Owner:{{item.user}}</p>
+                <a href="" class="btn btn-primary">Propose Swap</a> 
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div>
+        {% if items_category == 'Fashion & Clothing Items' %}
+        {% for item in fashion_clothing_items %}
+        <div class="card" style="width: 18rem;">
+            <img src="{{item.image.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{item.name}}</h5>
+                <p class="card-text">{{item.desc}}</p>
+                <p class="card-text">Owner:{{item.user}}</p>
+                <a href="" class="btn btn-primary">Propose Swap</a> 
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div>
+        {% if items_category == 'Books & Media Items' %}
+        {% for item in books_media_items %}
+        <div class="card" style="width: 18rem;">
+            <img src="{{ item.image.url }}" class="card-img-top" alt="..."  width="100" height="200">
+            <div class="card-body">
+                <h5 class="card-title">{{item.name}}</h5>
+                <p class="card-text">{{item.desc}}</p>
+                <p class="card-text">Owner:{{item.user}}</p>
+                <a href="" class="btn btn-primary">Propose Swap</a> 
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div>
+        {% if items_category == 'Vehicles & Parts' %}
+        {% for item in vehicles_parts_item %}
+        <div class="card" style="width: 18rem;">
+            <img src="{{item.image.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{item.name}}</h5>
+                <p class="card-text">{{item.desc}}</p>
+                <p class="card-text">Owner:{{item.user}}</p>
+                <a href="" class="btn btn-primary">Propose Swap</a> 
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div>
+        {% if items_category == 'Sports & Outdoors Items' %}
+        {% for item in sports_outdoors_items %}
+        <div class="card" style="width: 18rem;">
+            <img src="{{item.image.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{item.name}}</h5>
+                <p class="card-text">{{item.desc}}</p>
+                <p class="card-text">Owner:{{item.user}}</p>
+                <a href="" class="btn btn-primary">Propose Swap</a> 
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div>
+        {% if items_category == 'Tech & Design Service' %}
+        {% for item in tech_design_service_items %}
+        <div class="card" style="width: 18rem;">
+            <img src="{{item.image.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{item.name}}</h5>
+                <p class="card-text">{{item.desc}}</p>
+                <p class="card-text">Owner:{{item.user}}</p>
+                <a href="" class="btn btn-primary">Propose Swap</a> 
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div>
+        {% if items_category == 'Lesson & Tutoring' %}
+        {% for item in lession_tutoring_items %}
+        <div class="card" style="width: 18rem;">
+            <img src="{{item.image.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{item.name}}</h5>
+                <p class="card-text">{{item.desc}}</p>
+                <p class="card-text">Owner:{{item.user}}</p>
+                <a href="" class="btn btn-primary">Propose Swap</a> 
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div>
+        {% if items_category == 'Home & Pet Service' %}
+        {% for item in home_pet_service_items %}
+        <div class="card" style="width: 18rem;">
+            <img src="{{item.image.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{item.name}}</h5>
+                <p class="card-text">{{item.desc}}</p>
+                <p class="card-text">Owner:{{item.user}}</p>
+                <a href="" class="btn btn-primary">Propose Swap</a> 
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div>
+        {% if items_category == 'Skills & Services' %}
+        {% for item in skill_service_items %}
+        <div class="card" style="width: 18rem;">
+            <img src="{{item.image.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{item.name}}</h5>
+                <p class="card-text">{{item.desc}}</p>
+                <p class="card-text">Owner:{{item.user}}</p>
+                <a href="" class="btn btn-primary">Propose Swap</a> 
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+{% endblock%}

@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      
+      <h2 class="text-center fw-bold mb-4">Create New Listing</h2>
+
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="mb-4 p-4 text-center bg-light border border-2 border-secondary rounded-3">
+          <label for="itemImage" class="d-flex flex-column align-items-center justify-content-center mb-3" role="button">
+            <span class="fw-medium text-dark">Upload Item Image</span>
+          </label>
+          <input type="file" id="itemImage" name="image" class="form-control border-dark rounded-3" accept="image/*" required>
+        </div>
+
+        <div class="mb-3">
+          <input type="text" name="name" class="form-control border-dark rounded-3 py-2 px-3" placeholder="Item Title" required>
+        </div>
+
+        <div class="mb-3">
+          <textarea name="desc" class="form-control border-dark rounded-3 py-2 px-3" rows="4" placeholder="Detailed Description" required></textarea>
+        </div>
+
+        <div class="mb-4">
+          <select name="category" class="form-select border-dark rounded-3 py-2 px-3" required>
+            <option class="text-muted" selected disabled>Select Category</option>
+            <option value="Electronics Items">Electronics Items</option>
+            <option value="Home & Kitchen Items">Home & Kitchen Items</option>
+            <option value="Fashion & Clothing Items">Fashion & Clothing Items</option>
+            <option value="Books & Media Items">Books & Media Items</option>
+            <option value="Vehicles & Parts">Vehicles & Parts</option>
+            <option value="Sports & Outdoors Items">Sports & Outdoors Items</option>
+            <option value="Tech & Design Service">Tech Design and Service</option>
+            <option value="Lesson & Tutoring">Lesson Tutoring</option>
+            <option value="Home & Pet Service">Home & Pet Service</option>
+            <option value="Skills & Services">Skill & Service</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label for="wishlistAnchor" class="form-label fw-bold mb-1">The Wishlist Anchor<span class="fw-normal">(Optional)</span></label>
+          <textarea id="wishlistAnchor" name="wishlist" class="form-control border-dark rounded-3 py-2 px-3" rows="3" placeholder="List items that are desired in return"></textarea>
+          <div class="form-text text-dark mt-1">
+            This is not binding, just a visual anchor for other traders.
+          </div>
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-success btn-lg fw-semibold py-2 rounded-3">
+            Publish My Item
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+
+
+{% endblock%}
