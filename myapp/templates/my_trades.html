@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="bg-light py-5 min-vh-100">
+    <div class="container">
+        <h3 class="fw-bold mb-4">My Swap Offers</h3>
+
+        <ul class="nav nav-pills mb-4" id="tradeTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active fw-semibold" id="received-tab" data-bs-toggle="pill" data-bs-target="#received" type="button">
+                    Received Offers ({{ received_offers.count }})
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link fw-semibold" id="sent-tab" data-bs-toggle="pill" data-bs-target="#sent" type="button">
+                    Sent Offers ({{ sent_offers.count }})
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="tradeTabsContent">
+            
+            <div class="tab-pane fade show active" id="received" role="tabpanel">
+                {% for offer in received_offers %}
+                    <div class="card border-0 shadow-sm rounded-4 p-4 mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <span class="fw-bold">{{ offer.sender.name }}</span> wants your
+                                <span class="fw-bold text-success">{{ offer.target_item.name }}</span>
+                            </div>
+                            <span class="badge rounded-pill px-3 py-2
+                                {% if offer.status == 'PE' %}bg-warning text-dark
+                                {% elif offer.status == 'AC' %}bg-success
+                                {% elif offer.status == 'RE' %}bg-danger
+                                {% else %}bg-secondary{% endif %}">
+                                {{ offer.get_status_display }}
+                            </span>
+                        </div>
+
+                        <p class="small text-muted mb-2"><strong>Offered in return:</strong></p>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            {% for item in offer.offered_items.all %}
+                                <span class="badge bg-light text-dark border p-2">{{ item.name }}</span>
+                            {% endfor %}
+                        </div>
+
+                        {% if offer.message %}
+                            <div class="bg-light rounded-3 p-3 small mb-3">
+                                "{{ offer.message }}"
+                            </div>
+                        {% endif %}
+
+                        <!-- Action Buttons Based on Status -->
+                        {% if offer.status == 'PE' %}
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'respond_swap' offer.id 'accept' %}" class="btn btn-sm fw-semibold text-dark" style="background-color: #20c997;">
+                                    Accept Swap
+                                </a>
+                                <a href="{% url 'respond_swap' offer.id 'reject' %}" class="btn btn-sm btn-outline-danger">
+                                    Reject
+                                </a>
+                            </div>
+                        {% elif offer.status == 'AC' %}
+                            <div class="alert alert-success d-flex justify-content-between align-items-center mb-0">
+                                <div class="small">
+                                    <strong>Swap Accepted!</strong> Contact {{ offer.sender.name }}:
+                                    {{ offer.sender.phone_number }} | {{ offer.sender.email }}
+                                </div>
+                                <a href="{% url 'complete_swap' offer.id %}" class="btn btn-sm btn-success">
+                                    Mark Trade Complete
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <div class="card border-0 shadow-sm rounded-4 p-5 text-center text-muted">
+                        No swap offers received yet.
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="tab-pane fade" id="sent" role="tabpanel">
+                {% for offer in sent_offers %}
+                    <div class="card border-0 shadow-sm rounded-4 p-4 mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                You requested <span class="fw-bold text-success">{{ offer.target_item.name }}</span>
+                                from <span class="fw-bold">{{ offer.receiver.name }}</span>
+                            </div>
+                            <span class="badge rounded-pill px-3 py-2
+                                {% if offer.status == 'PE' %}bg-warning text-dark
+                                {% elif offer.status == 'AC' %}bg-success
+                                {% elif offer.status == 'RE' %}bg-danger
+                                {% else %}bg-secondary{% endif %}">
+                                {{ offer.get_status_display }}
+                            </span>
+                        </div>
+
+                        <p class="small text-muted mb-2"><strong>You offered:</strong></p>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            {% for item in offer.offered_items.all %}
+                                <span class="badge bg-light text-dark border p-2">{{ item.name }}</span>
+                            {% endfor %}
+                        </div>
+
+                        {% if offer.status == 'AC' %}
+                            <div class="alert alert-success d-flex justify-content-between align-items-center mb-0">
+                                <div class="small">
+                                    <strong>Accepted!</strong> Contact {{ offer.receiver.name }}:
+                                    {{ offer.receiver.phone_number }} | {{ offer.receiver.email }}
+                                </div>
+                                <a href="{% url 'complete_swap' offer.id %}" class="btn btn-sm btn-success">
+                                    Mark Trade Complete
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <div class="card border-0 shadow-sm rounded-4 p-5 text-center text-muted">
+                        You haven't sent any swap offers yet.
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

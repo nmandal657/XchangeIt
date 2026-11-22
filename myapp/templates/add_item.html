@@ -6,25 +6,29 @@
 <div class="container py-5">
   <div class="row justify-content-center">
     <div class="col-12 col-md-8 col-lg-6">
-      
+
       <h2 class="text-center fw-bold mb-4">Create New Listing</h2>
 
       <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class="mb-4 p-4 text-center bg-light border border-2 border-secondary rounded-3">
-          <label for="itemImage" class="d-flex flex-column align-items-center justify-content-center mb-3" role="button">
+          <label for="itemImage" class="d-flex flex-column align-items-center justify-content-center mb-3"
+            role="button">
             <span class="fw-medium text-dark">Upload Item Image</span>
           </label>
-          <input type="file" id="itemImage" name="image" class="form-control border-dark rounded-3" accept="image/*" required>
+          <input type="file" id="itemImage" name="image" class="form-control border-dark rounded-3" accept="image/*"
+            required>
         </div>
 
         <div class="mb-3">
-          <input type="text" name="name" class="form-control border-dark rounded-3 py-2 px-3" placeholder="Item Title" required>
+          <input type="text" name="name" class="form-control border-dark rounded-3 py-2 px-3" placeholder="Item Title"
+            required>
         </div>
 
         <div class="mb-3">
-          <textarea name="desc" class="form-control border-dark rounded-3 py-2 px-3" rows="4" placeholder="Detailed Description" required></textarea>
+          <textarea name="desc" class="form-control border-dark rounded-3 py-2 px-3" rows="4"
+            placeholder="Detailed Description" required></textarea>
         </div>
 
         <div class="mb-4">
@@ -45,8 +49,10 @@
         </div>
 
         <div class="mb-4">
-          <label for="wishlistAnchor" class="form-label fw-bold mb-1">The Wishlist Anchor<span class="fw-normal">(Optional)</span></label>
-          <textarea id="wishlistAnchor" name="wishlist" class="form-control border-dark rounded-3 py-2 px-3" rows="3" placeholder="List items that are desired in return"></textarea>
+          <label for="wishlistAnchor" class="form-label fw-bold mb-1">The Wishlist Anchor<span
+              class="fw-normal">(Optional)</span></label>
+          <textarea id="wishlistAnchor" name="wishlist" class="form-control border-dark rounded-3 py-2 px-3" rows="3"
+            placeholder="List items that are desired in return"></textarea>
           <div class="form-text text-dark mt-1">
             This is not binding, just a visual anchor for other traders.
           </div>

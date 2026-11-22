@@ -11,4 +11,8 @@ urlpatterns = [
     path('home/', views.home, name='home'),
     path('add_item/', views.add_item, name='add_item'),
     path('view_profile/<int:user_id>/', views.view_profile, name='view_profile'),
+    path('propose_swap/<int:item_id>/', views.propose_swap, name='propose_swap'),
+    path('my_trades/', views.my_trades, name='my_trades'),
+    path('respond_swap/<int:proposal_id>/<str:action>/', views.respond_swap, name='respond_swap'),
+    path('complete_swap/<int:proposal_id>/', views.complete_swap, name='complete_swap'),
 ]

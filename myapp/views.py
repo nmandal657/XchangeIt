@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 
 # Create your views here.
-from .models import User, UserProfile, Item
+from .models import User, UserProfile, Item, TradeProposal
 import datetime
 from django.contrib import messages
 
@@ -26,6 +26,7 @@ def signup(request):
             password = form_password
         )
     return render(request, 'signup.html')
+
 
 def login(request):
     if request.method == 'POST':
@@ -132,6 +133,7 @@ def add_item(request):
         return redirect('profile')
     return render(request, 'add_item.html')
 
+
 def view_profile(request, user_id):
 
     owner = get_object_or_404(User, id=user_id)
@@ -148,15 +150,15 @@ def view_profile(request, user_id):
     return render(request, 'view_profile.html', context)
 
 
-
 def logout(request):
     request.session.flush()
     return redirect('login')
 
+
 def home(request):
     current_user_email = request.session.get('user')
-    # if not current_user_email:
-    #     return redirect('login')
+    if not current_user_email:
+        return redirect('login')
 
     current_user = User.objects.filter(email = current_user_email).first()
     
@@ -191,3 +193,104 @@ def home(request):
     }
     
     return render(request, 'home.html', context)
+
+
+def propose_swap(request, item_id):
+    user_email = request.session.get('user')
+    if not user_email:
+        return redirect('login')
+
+    sender = get_object_or_404(User, email=user_email)
+    clicked_item = get_object_or_404(Item, id=item_id)
+    receiver = clicked_item.user
+
+    if receiver == sender:
+        return redirect('home')
+
+    receiver_items = Item.objects.filter(user=receiver, is_product_available=True)
+    my_items = Item.objects.filter(user=sender, is_product_available=True)
+    error = None
+
+    if request.method == 'POST':
+        selected_target_ids = request.POST.getlist('target_items')
+        selected_offered_ids = request.POST.getlist('offered_items')
+        message = request.POST.get('message', '')
+
+        if not selected_target_ids or not selected_offered_ids:
+            error = "Please select at least one item you want AND at least one item to offer."
+        else:
+            proposal = TradeProposal.objects.create(
+                sender=sender,
+                receiver=receiver,
+                message=message
+            )
+            proposal.target_items.set(Item.objects.filter(id__in=selected_target_ids, user=receiver))
+            proposal.offered_items.set(Item.objects.filter(id__in=selected_offered_ids, user=sender))
+            return redirect('my_trades')
+
+    context = {
+        'clicked_item': clicked_item,
+        'receiver': receiver,
+        'receiver_items': receiver_items,
+        'my_items': my_items,
+        'error': error,
+    }
+    return render(request, 'propose_swap.html', context)
+
+
+def my_trades(request):
+    user_email = request.session.get('user')
+    if not user_email:
+        return redirect('login')
+
+    user = get_object_or_404(User, email=user_email)
+    received_offers = TradeProposal.objects.filter(receiver=user)
+    sent_offers = TradeProposal.objects.filter(sender=user)
+
+    context = {
+        'received_offers': received_offers,
+        'sent_offers': sent_offers,
+    }
+    return render(request, 'my_trades.html', context)
+
+
+def respond_swap(request, proposal_id, action):
+    proposal = get_object_or_404(TradeProposal, id=proposal_id)
+
+    if action == 'accept':
+        proposal.status = 'AC'
+        proposal.save()
+
+        proposal.target_item.is_product_available = False
+        proposal.target_item.save()
+
+        for item in proposal.offered_items.all():
+            item.is_product_available = False
+            item.save()
+
+    elif action == 'reject':
+        proposal.status = 'RE'
+        proposal.save()
+
+    return redirect('my_trades')
+
+
+def complete_swap(request, proposal_id):
+    proposal = get_object_or_404(TradeProposal, id=proposal_id)
+
+    if proposal.status == 'AC':
+        proposal.status = 'CO'
+        proposal.save()
+
+        sender_profile = UserProfile.objects.filter(user=proposal.sender).first()
+        receiver_profile = UserProfile.objects.filter(user=proposal.receiver).first()
+
+        if sender_profile:
+            sender_profile.successful_trades_count += 1
+            sender_profile.save()
+
+        if receiver_profile:
+            receiver_profile.successful_trades_count += 1
+            receiver_profile.save()
+
+    return redirect('my_trades')

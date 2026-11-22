@@ -19,12 +19,10 @@ class UserProfile(models.Model):
     state = models.CharField(max_length=100, blank=False, null=False)
     postal_code = models.CharField(max_length=10, blank=False, null=False)
     successful_trades_count = models.PositiveIntegerField(default=0)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
 
     def __str__(self):
         return self.user.name
-
-# class User_profile(models.Model):
 
 
 class Item(models.Model):
@@ -49,7 +47,30 @@ class Item(models.Model):
     wishlist = models.TextField()
     is_product_available = models.BooleanField(default=True)
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='items', blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='items')
 
     def __str__(self):
         return self.name
+
+
+
+class TradeProposal(models.Model):
+    STATUS_CHOICES = [
+        ('PE', 'Pending'),
+        ('AC', 'Accepted'),
+        ('RE', 'Rejected'),
+        ('CO', 'Completed'),
+    ]
+
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_proposals')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_proposals')
+    
+    target_item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='target_proposals')
+    
+    offered_items = models.ManyToManyField(Item, related_name='offered_in_proposals')
+    
+    message = models.TextField(blank=True)
+    status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='PE')
+
+    def __str__(self):
+        return f"{self.sender.name} -> {self.receiver.name} for {self.target_item.name}"
